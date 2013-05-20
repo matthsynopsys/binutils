@@ -82,17 +82,17 @@ default.
 @cindex @code{-mlock} command line option, ARC
 @item -mlock
 Option -mlock enables @code{LLOCK} and @code{SCOND} extension
-instructions added with the ARC700 core 4 processor, version v4.10.
+instructions added with the ARC 700 core 4 processor, version v4.10.
 
 @cindex @code{-mswape} command line option, ARC
 @item -mswape
 Option -mswape enables @code{SWAPE} extension
-instruction added with the ARC700 core 4 processor, version v4.10.
+instruction added with the ARC 700 core 4 processor, version v4.10.
 
 @cindex @code{-mrtsc} command line option, ARC
 @item -mrtsc
 Option -mrtsc enables @code{RTSC} extension
-instruction added with the ARC700 core 4 processor, version v4.10.
+instruction added with the ARC 700 core 4 processor, version v4.10.
 @c END ARC LOCAL
 
 @end table
@@ -154,13 +154,13 @@ machine directives:
 
 @cindex @code{extAuxRegister} directive, ARC
 @item .extAuxRegister @var{name},@var{address},@var{mode}
-The ARCtangent A4 has extensible auxiliary register space.  The
+The ARCtangent-A4 has extensible auxiliary register space.  The
 auxiliary registers can be defined in the assembler source code by
 using this directive.  The first parameter is the @var{name} of the
 new auxiallry register.  The second parameter is the @var{address} of
 the register in the auxiliary register memory map for the variant of
-the ARC.  The third parameter specifies the @var{mode} in which the
-register can be operated is and it can be one of: 
+the ARC processor.  The third parameter specifies the @var{mode} in 
+which the register can be operated is and it can be one of: 
 
 @table @code
 @item r          (readonly) 
@@ -180,7 +180,7 @@ writable.
 
 @cindex @code{extCondCode} directive, ARC
 @item .extCondCode @var{suffix},@var{value}
-The condition codes on the ARCtangent A4 are extensible and can be
+The condition codes on the ARCtangent-A4 are extensible and can be
 specified by means of this assembler directive.  They are specified
 by the suffix and the value for the condition code.  They can be used to
 specify extra condition codes with any values.  For example:
@@ -196,7 +196,7 @@ specify extra condition codes with any values.  For example:
 @item .extCoreRegister @var{name},@var{regnum},@var{mode},@var{shortcut}
 Specifies an extension core register @var{name} for the application.
 This allows a register @var{name} with a valid @var{regnum} between 0
-and 60, with the following as valid values for @var{mode} 
+and 60, with the following as valid values for @var{mode}:
 
 @table @samp
 @item @emph{r}   (readonly) 
@@ -224,7 +224,7 @@ can shortcut the pipeline.
 
 @cindex @code{extInstruction} directive, ARC
 @item .extInstruction @var{name},@var{opcode},@var{subopcode},@var{suffixclass},@var{syntaxclass}
-The ARCtangent A4 allows the user to specify extension instructions.
+The ARCtangent-A4 allows the user to specify extension instructions.
 The extension instructions are not macros.  The assembler creates
 encodings for use of these instructions according to the specification
 by the user.  The parameters are:
@@ -243,8 +243,8 @@ correct value also depends on @var{syntaxclass}
 
 @item @var{suffixclass}
 Determines the kinds of suffixes to be allowed.  Valid values are
-@code{SUFFIX_NONE}, @code{SUFFIX_COND}, 
-@code{SUFFIX_FLAG} which indicates the absence or presence of
+@code{SUFFIX_NONE}, @code{SUFFIX_COND}, and
+@code{SUFFIX_FLAG}, which indicate the absence or presence of
 conditional suffixes and flag setting by the extension instruction.
 It is also possible to specify that an instruction sets the flags and
 is conditional by using @code{SUFFIX_CODE} | @code{SUFFIX_FLAG}.
@@ -260,21 +260,22 @@ following values:
 3 Operand Instruction 
 @end table
 
-In addition there could be modifiers for the syntax class as described
+In addition there can be modifiers for the syntax class as described
 below:
 
 @itemize @minus
 Syntax Class Modifiers are:
 
 @item @code{OP1_MUST_BE_IMM}:
-Modifies syntax class SYNTAX_3OP,  specifying that the first operand
+Modifies syntax class SYNTAX_3OP, specifying that the first operand
 of a three-operand instruction must be an immediate (i.e., the result
 is discarded).  OP1_MUST_BE_IMM is used by bitwise ORing it with
-SYNTAX_3OP as given in the example below.  This could usually be used
-to set the flags using specific instructions and not retain results. 
+SYNTAX_3OP as given in the example below.  This modifier is usually 
+used to set the flags using specific instructions and not retain 
+results. 
 
 @item @code{OP1_IMM_IMPLIED}:
-Modifies syntax class SYNTAX_20P, it specifies that there is an
+Modifies syntax class SYNTAX_20P. It specifies that there is an
 implied immediate destination operand which does not appear in the
 syntax.  For example, if the source code contains an instruction like:
 
@@ -282,15 +283,15 @@ syntax.  For example, if the source code contains an instruction like:
 inst r1,r2 
 @end smallexample
 
-it really means that the first argument is an implied immediate (that
-is, the result is discarded).  This is the same as though the source
-code were: inst 0,r1,r2.  You use OP1_IMM_IMPLIED by bitwise ORing it
-with SYNTAX_20P.
+the first argument is an implied immediate (that is, the result is 
+discarded).  This is the same as though the source code were: 
+inst 0,r1,r2.  You use OP1_IMM_IMPLIED by bitwise ORing it with 
+SYNTAX_20P.
 
 @end itemize 
 @end table
 
-For example, defining 64-bit multiplier with immediate operands:
+For example, defining a 64-bit multiplier with immediate operands:
 
 @smallexample
 .extInstruction mp64,0x14,0x0,SUFFIX_COND | SUFFIX_FLAG ,
@@ -298,16 +299,16 @@ For example, defining 64-bit multiplier with immediate operands:
 @end smallexample
 
 The above specifies an extension instruction called mp64 which has 3 operands,
-sets the flags, can be used with a condition code, for which the
-first operand is an immediate.  (Equivalent to discarding the result 
+sets the flags, can be used with a condition code, and requires the first 
+operand to be an immediate.  (Equivalent to discarding the result 
 of the operation).
 
 @smallexample
  .extInstruction mul64,0x14,0x00,SUFFIX_COND, SYNTAX_2OP|OP1_IMM_IMPLIED
 @end smallexample
 
-This describes a 2 operand instruction with an implicit first
-immediate operand.  The result of this operation would be discarded.
+This example describes a 2-operand instruction with an implicit first
+immediate operand.  The result of this operation is typically discarded.
 
 @cindex @code{half} directive, ARC
 @item .half @var{expressions}
@@ -345,6 +346,6 @@ between the two - even for the implicit default core version
 @cindex ARC opcodes
 @cindex opcodes for ARC
 
-For information on the ARC instruction set, see @cite{ARC Programmers
-Reference Manual}, ARC International (www.arc.com)
+For information on the ARC instruction set, see the @cite{ARC Programmers
+Reference Manual}, available where you download the processor IP library.
 
